@@ -1,17 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Recipe
 
+
 def main(request):
-    # recipes_2023 = Recipe.objects.filter(created_at__year=2023)
+    recipes_2023 = Recipe.objects.filter(created_at__year=2023)
 
     context = {
-        'recipes': []
+        'recipes': recipes_2023
     }
     return render(request, 'main.html', context)
 
 
 def recipe_detail(request, recipe_id):
-    # Шукаємо рецепт за його id. Якщо такого немає - видасть помилку 404
     recipe = get_object_or_404(Recipe, id=recipe_id)
 
     context = {
