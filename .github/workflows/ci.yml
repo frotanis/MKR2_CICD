@@ -1,4 +1,4 @@
-name: Django CI
+name: Django CI/CD
 
 on:
   push:
@@ -26,3 +26,18 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy to Heroku setup
+      uses: akhileshns/heroku-deploy@v3.12.14
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "your-app-name-here"
+        heroku_email: "your-email@example.com"
+        justlogin: true
