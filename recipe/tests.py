@@ -1,3 +1,24 @@
 from django.test import TestCase
+from django.urls import reverse
+from .models import Recipe, Category
 
-# Create your tests here.
+class RecipeViewsTest(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name="Desserts")
+        self.recipe = Recipe.objects.create(
+            title="Test Recipe",
+            description="Test Desc",
+            instructions="Test Inst",
+            ingredients="Test Ing",
+            category=self.category
+        )
+
+    def test_main_view(self):
+        response = self.client.get(reverse('main'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'main.html')
+
+    def test_recipe_detail_view(self):
+        response = self.client.get(reverse('recipe_detail', args=[self.recipe.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipe_detail.html')
